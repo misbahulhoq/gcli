@@ -4,10 +4,13 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 
+	"github.com/misbahulhoq/gcm/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -26,13 +29,15 @@ to quickly create a Cobra application.`,
 			fmt.Println("❌ Not a git repository. Did you run \"git init\" ?")
 			return
 		}
-		output, err := GetStagedChanges()
+		diff, err := GetStagedChanges()
 
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(output)
+
+		message := utils.GetMeaningfulCommitMessage(diff)
+		Commit(message)
 	},
 }
 
@@ -68,11 +73,31 @@ func GetStagedChanges() (string, error) {
 	return diff, nil
 }
 
-func Commit() {
-	cmd := exec.Command("git", "diff")
-	output, err := cmd.Output()
+func GetAllChanges() {}
 
-	if err != nil {
-		fmt.Println(output)
+func Commit(message string) {
+	// Print the commit message clearly
+	fmt.Println("\n\nProposed commit message: ")
+	fmt.Println("\n-----------------------------------------")
+	fmt.Printf(" \n%s\n", message)
+	fmt.Println("-----------------------------------------")
+	// Ask for confirmation
+	fmt.Print("Do you want to commit with this message? (Y/n): ")
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+
+	input = strings.TrimSpace(strings.ToLower(input))
+	// We check for "y", "yes", or empty string (if you want Enter to mean Yes)
+	if input == "y" || input == "yes" || input == "" {
+		cmd := exec.Command("git", "commit", "-m", message)
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Error while committing ", err)
+			return
+		}
+		fmt.Println("✅ Git commit successful")
 	}
+
+	fmt.Println("Commit Aborted ")
+
 }
