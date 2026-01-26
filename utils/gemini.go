@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -11,7 +12,13 @@ import (
 
 func GetMeaningfulCommitMessage(changes string) string {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, nil)
+
+	apiKey := os.Getenv("GEMINI_API_KEY")
+	if apiKey == "" {
+		return "Error: GEMINI_API_KEY is missing"
+	}
+
+	client, err := genai.NewClient(ctx, &genai.ClientConfig{APIKey: apiKey})
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 
 	s.Suffix = " Generating commit message..."
