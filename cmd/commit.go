@@ -92,7 +92,6 @@ func GetAllChanges() (string, error) {
 
 	// If did CheckAndStage() function returns nil that means no changes found or the user has run  "git add .". In that case we operate it as if the user has run "git add ."
 	if didStage == nil {
-		fmt.Println("git diff Head did run.")
 		cmd := exec.Command("git", "diff", "HEAD")
 		output, err := cmd.Output()
 
