@@ -23,7 +23,7 @@ func GetMeaningfulCommitMessage(changes string) string {
 		return ""
 	}
 
-	result, err := client.Models.GenerateContent(ctx, "gemini-2.5-flash", genai.Text("You are a git commit message generator. Output ONLY the raw commit message using Conventional Commits format. DO NOT use markdown code blocks (```). DO NOT add conversational text like 'Here is the commit message'. DO NOT wrap the output in quotes."+changes), nil)
+	result, err := client.Models.GenerateContent(ctx, "gemini-2.5-flash", genai.Text("You are a git commit message generator. Output ONLY the raw commit message using Conventional Commits format. DO NOT use markdown code blocks (```). DO NOT add conversational text like 'Here is the commit message'. DO NOT wrap the output in quotes. \n"+changes), nil)
 
 	if err != nil {
 		fmt.Println(err)
