@@ -21,7 +21,7 @@ var healthcheckCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		if !IsGitRepo() {
-			fmt.Println("❌ Not a git repository.")
+			fmt.Println("❌ Not a git repository. Did you run \"git init\" ?")
 			os.Exit(1)
 		}
 		fmt.Println("✅ Git repository detected. You can now run other commands.")
