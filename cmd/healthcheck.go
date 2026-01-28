@@ -24,7 +24,7 @@ var healthcheckCmd = &cobra.Command{
 			fmt.Println("❌ Not a git repository.")
 			os.Exit(1)
 		}
-		fmt.Println("✅ Git repository detected.")
+		fmt.Println("✅ Git repository detected. You can now run other commands.")
 	},
 }
 
