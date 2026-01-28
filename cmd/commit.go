@@ -163,7 +163,7 @@ func CheckAndStage() *bool {
 
 		status := line[0:2]
 		filePath := line[3:]
-		green := color.New(color.FgGreen).SprintFunc()
+		green := color.New(color.FgGreen).SprintfFunc()
 		yellow := color.New(color.FgYellow).SprintfFunc()
 		red := color.New(color.FgRed).SprintfFunc()
 
