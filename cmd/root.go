@@ -14,7 +14,8 @@ var rootCmd = &cobra.Command{
 	Use:     "gcli",
 	Version: "1.0.0",
 	Short:   "An AI based Git Committer CLI tool",
-	Long: `The Git Committer CLI is a command-line utility developed in Go designed to streamline the software development workflow. It automates the process of writing git commit messages by analyzing staged changes and leveraging Google's Gemini AI to generate context-aware, meaningful, and conventional commit messages.
+	Long: `
+GCLI is an AI powered Git Committer CLI tool. It uses Google's Gemini API to generate commit messages for you.
 `,
 }
 
