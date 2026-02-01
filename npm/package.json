@@ -1,5 +1,5 @@
 {
-  "name": "npm-package",
+  "name": "git-ac",
   "version": "1.0.0",
   "description": "AI Git Commit Message Generator",
   "main": "index.js",

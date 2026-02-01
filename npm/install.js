@@ -5,12 +5,10 @@ const root = `https://github.com/misbahulhoq/git-ac/releases/download/v${version
 
 module.exports = binwrap({
   dirname: __dirname,
-  binaries: ["gcli"],
+  binaries: ["git-ac"],
   urls: {
-    // These must match the filenames you upload to GitHub Releases EXACTLY.
-    // Format: "OS-Arch": "Download URL"
     // Windows 64-bit
-    "win32-x64": root + "/git-ac.exe",
+    "win32-x64": root + "/git-ac-windows.exe",
 
     // Linux 64-bit
     "linux-x64": root + "/git-ac-linux",
