@@ -1,6 +1,6 @@
 {
   "name": "git-ac-cli",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "AI Git Commit Message Generator",
   "main": "index.js",
   "bin": {

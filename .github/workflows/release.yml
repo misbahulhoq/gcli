@@ -1,0 +1,83 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "npm/package.json" # Only run if the version likely changed
+      - "**/*.go" # Or if Go code changed
+
+jobs:
+  release:
+    name: Build and Release Binaries
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to create releases
+
+    steps:
+      # 1. Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Extract Version from npm/package.json
+      - name: Get Version from package.json
+        id: package_version
+        run: |
+          VERSION=$(node -p "require('./npm/package.json').version")
+          echo "Detected version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # 3. Check if this tag already exists
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          git fetch --tags
+          if git rev-parse "v${{ steps.package_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Tag v${{ steps.package_version.outputs.version }} already exists. Skipping release."
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      # 4. Setup Go (Only if new version)
+      - name: Setup Go
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25" # Go version
+
+      # 5. Build Binaries (Only if new version)
+      # Note: We build from ./cmd/git-ac/ because of your folder structure
+      - name: Build Binaries
+        if: steps.tag_check.outputs.exists == 'false'
+        run: |
+          mkdir dist
+
+          echo "🚧 Building Windows..."
+          GOOS=windows GOARCH=amd64 go build -o dist/git-ac-windows.exe ./cmd/git-ac
+
+          echo "🚧 Building Linux..."
+          GOOS=linux GOARCH=amd64 go build -o dist/git-ac-linux ./cmd/git-ac
+
+          echo "🚧 Building Mac (Intel)..."
+          GOOS=darwin GOARCH=amd64 go build -o dist/git-ac-mac ./cmd/git-ac
+
+          # Optional: Mac (Apple Silicon) if you want to support M1/M2 specifically
+          # GOOS=darwin GOARCH=arm64 go build -o dist/git-ac-mac-arm64 ./cmd/git-ac
+
+      # 6. Create Release & Upload Assets
+      - name: Create Release
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.package_version.outputs.version }}
+          name: Release v${{ steps.package_version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/git-ac-windows.exe
+            dist/git-ac-linux
+            dist/git-ac-mac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
