@@ -52,7 +52,7 @@ jobs:
       - name: Build Binaries
         if: steps.tag_check.outputs.exists == 'false'
         run: |
-          mkdir dist
+          mkdir -p dist
 
           echo "🚧 Building Windows..."
           GOOS=windows GOARCH=amd64 go build -o dist/git-ac-windows.exe ./cmd/git-ac
