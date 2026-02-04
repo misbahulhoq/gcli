@@ -21,7 +21,7 @@ func GetMeaningfulCommitMessage(changes string) string {
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{APIKey: apiKey})
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 
-	s.Suffix = " Generating commit message...\n\n"
+	s.Suffix = " Generating commit message...\n"
 	s.Color("cyan")
 	s.HideCursor = true
 	s.Writer = os.Stderr
