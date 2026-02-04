@@ -7,4 +7,4 @@ gcm.exe
 gcli.exe
 /vendor
 **/node_modules
-/npm/bin
+/npm/bin/git-ac**
